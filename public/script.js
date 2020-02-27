@@ -70,7 +70,7 @@ function editGraduate(id) {
     };
 
     let xhrEdit = new XMLHttpRequest();
-    xhrEdit.open("PUT", url + `/${id}`);
+    xhrEdit.open("POST", url + `/${id}`);
     xhrEdit.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhrEdit.onload = () => {
         let grads = JSON.parse(xhrEdit.response);

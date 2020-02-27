@@ -33,22 +33,19 @@ router.post('/', async(req, res) =>{
 });
 
 
-router.put('/:id', async(req, res) =>{
-    console.log(req.params.id);
-    Grad.findByIdAndUpdate(req.params.id)
-    .then(grad = {
-        name: req.body.name,
-        role: req.body.role,
-        company: req.body.company,
-        yearOfGraduation: req.body.yearOfGraduation
-    })
-    try {
-        console.log(grad);
-        res.status(201).json(grad);
-    } catch (err) {
-        res.status(400).json({message : err.message});
-    }
-})
+router.post('/:id', async (req, res) => {
+    Grad.findById(req.params.id)
+        .then(grad => {
+            grad.name = req.body.name;
+            grad.role = req.body.role;
+            grad.company = req.body.company;
+            grad.yearOfGraduation = req.body.yearOfGraduation;
+            grad.save()
+                .then(() => res.json('grad updated!'))
+                .catch(err => res.status(400).json('Error: ' + err));
+            })
+            .catch(err => res.status(400).json('Error: ' + err));
+    });
 
 router.delete('/:id', async(req, res) => {
     console.log(req.params.id);
