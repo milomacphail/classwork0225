@@ -33,4 +33,30 @@ router.post('/', async(req, res) =>{
 });
 
 
+router.put('/:id', async(req, res) =>{
+    console.log(req.params.id);
+    Grad.findById(req.params.id)
+    .then(grad = {
+        name: req.body.name,
+        role: req.body.role,
+        company: req.body.company,
+        yearOfGraduation: req.body.yearOfGraduation
+    })
+    try {
+        console.log(grad);
+        grad.save;
+        res.status(201).json(grad);
+    } catch (err) {
+        res.status(400).json({message : err.message});
+    }
+})
+
+router.delete('/:id', async(req, res) => {
+    console.log(req.params.id);
+    Grad.findById(req.params.id)
+    .then(grad => grad.remove().then(res.json({ success: "true" })))
+    .then(err => res.status(404).json("Not found."));
+    console.log("deleted");
+})
+
 module.exports = router;

@@ -20,20 +20,23 @@ xhrGetAll.onload = () => {
 const renderGrads = () => {
     console.log("click");
     const gradList = grads.map(element => {
+        console.log(element._id);
         return (
             "<li>" +
-            "Name:" + element.name +
-            " , " +
-            "Role:" + element.role +
-            " , " +
-            "Company:" + element.company +
-            " , " +
-            "Date of Graduation:" + element.yearOfGraduation +
+            "Name: " + element.name +
+            ", " +
+            "Role: " + element.role +
+            ", " +
+            "Company: " + element.company +
+            ", " +
+            "Date of Graduation: " + element.yearOfGraduation +
+            `  <button class="btn waves-effect waves-light" onclick="editGraduate('${element._id}')">Edit Graduate</button>` +
+            `  <button class="btn waves-effect waves-light" onclick="deleteGraduate('${element._id}')">Delete Graduates</button>` +
             "</li>"
         )
     })
     document.getElementById("results").innerHTML =
-        "<ul>" + gradList.join('\n') + "</ul>";
+        "<ul>" + gradList.join() + "</ul>";
 }
 
 
@@ -50,24 +53,24 @@ function addGraduate(e) {
     console.log(grad);
 
     let xhrPost = new window.XMLHttpRequest();
-    xhrPost.open("Post", url);
+    xhrPost.open("POST", url);
     xhrPost.setRequestHeader("Content-Type", "application/json");
     xhrPost.send(JSON.stringify(grad));
 
 }
 
-function editGraduate(e) {
-    e.preventDefault();
+function editGraduate(id) {
     console.log("Editing open");
 
-    let grad = {};
-    grad.name = "Arnell";
-    grad.role = "Founder";
-    grad.company = "CareerDevs";
-    grad.yearOfGraduation = Date.now();
+    let grad = {
+        name: document.getElementById("name").value,
+        role: document.getElementById("role").value,
+        company: document.getElementById("company").value,
+        yearOfGraduation: document.getElementById("yearOfGraduation").value
+    };
 
     let xhrEdit = new XMLHttpRequest();
-    xhrEdit.open("PUT", url + "/id");
+    xhrEdit.open("PUT", url + `/${id}`);
     xhrEdit.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhrEdit.onload = () => {
         let grads = JSON.parse(xhrEdit.response);
@@ -80,15 +83,14 @@ function editGraduate(e) {
     xhrEdit.send(JSON.stringify(grad));
 }
 
-function deleteGrad(e) {
-    e.preventDefault();
+function deleteGraduate(id) {
     console.log("Delete request");
 
     let xhrDelete = new XMLHttpRequest();
-    xhrDelete.open("DELETE", url +"/id", true);
+    xhrDelete.open("DELETE", url +`/${id}`, true);
     xhrDelete.onload = function () {
-        let grads = JSON.parse(xhrDelete.responseText);
-        if (xhrDelete.readyState == 4 && xhr.status == "200") {
+        let grads = JSON.parse(xhrDelete.response);
+        if (xhrDelete.readyState == 4 && xhrDelete.status == "200") {
             console.table(grads);
         } else {
             console.error(grads);
