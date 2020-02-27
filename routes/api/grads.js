@@ -34,17 +34,9 @@ router.post('/', async(req, res) =>{
 
 
 router.post('/:id', async (req, res) => {
-    Grad.findById(req.params.id)
-        .then(grad => {
-            grad.name = req.body.name;
-            grad.role = req.body.role;
-            grad.company = req.body.company;
-            grad.yearOfGraduation = req.body.yearOfGraduation;
-            grad.save()
-                .then(() => res.json('grad updated!'))
+    Grad.findByIdAndUpdate(req.params.id, req.body, { new: true })
+                .then(grad => res.json(grad))
                 .catch(err => res.status(400).json('Error: ' + err));
-            })
-            .catch(err => res.status(400).json('Error: ' + err));
     });
 
 router.delete('/:id', async(req, res) => {
