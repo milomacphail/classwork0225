@@ -42,6 +42,12 @@ router.put('/:id', async(req, res) =>{
         company: req.body.company,
         yearOfGraduation: req.body.yearOfGraduation
     })
+    try {
+        console.log(grad);
+        res.status(201).json(grad);
+    } catch (err) {
+        res.status(400).json({message : err.message});
+    }
 })
 
 router.delete('/:id', async(req, res) => {
